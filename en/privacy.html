@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Privacy policy — Gesture Remote</title>
+  <meta name="description" content="Gesture Remote privacy policy: what the app processes, what it stores on the phone and what it sends.">
+  <meta name="theme-color" content="#000525">
+  <link rel="alternate" hreflang="es" href="../privacy.html">
+  <link rel="alternate" hreflang="en" href="privacy.html">
+  <link rel="icon" type="image/png" href="../assets/favicon.png">
+  <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <a class="skip" href="#content">Skip to content</a>
+
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="./">
+        <img src="../assets/icon-192.png" alt="" width="36" height="36">
+        Gesture Remote
+      </a>
+      <nav class="site-nav" aria-label="Main">
+        <a href="./">Home</a>
+        <a href="../privacy.html" lang="es" hreflang="es">Español</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="content" class="doc">
+    <div class="wrap">
+      <h1>Privacy policy</h1>
+      <p class="updated">Gesture Remote · Last updated: October 18, 2026</p>
+
+      <p>Gesture Remote is an Android app, developed by FabApps, that turns hand gestures captured by the camera into key presses to control presentations and media. This policy explains what data the app uses and what it does with it.</p>
+
+      <h2>Summary</h2>
+      <ul>
+        <li>Gesture recognition happens <strong>on the phone</strong>. Camera images are never stored or sent anywhere.</li>
+        <li>There are no accounts, servers, ads, analytics or trackers.</li>
+        <li>FabApps <strong>does not collect or receive</strong> any of your data. What the app stores stays on your phone; what it sends goes only to the computer you choose.</li>
+      </ul>
+
+      <h2>Camera</h2>
+      <p>The app uses the camera only on the Practice, Start presentation and Media control screens, and asks for permission before first use. Each frame is analyzed on the phone to locate the points of the hand and recognize the gesture, and is then discarded. No photos or video are stored, no image leaves the phone, and there is no face recognition or identification of people. The camera is released when you leave those screens or the app goes to the background.</p>
+
+      <h2>Data stored on the phone</h2>
+      <table>
+        <thead><tr><th scope="col">Data</th><th scope="col">Purpose</th></tr></thead>
+        <tbody>
+          <tr><td>Profiles and sensitivity settings</td><td>Remember your gesture-to-key mappings</td></tr>
+          <tr><td>Session history: date, duration, number of actions and ignored gestures, frames per second and latency (up to 200 sessions)</td><td>Recognition diagnostics. It contains no images or hand positions</td></tr>
+          <tr><td>Address of the last Bluetooth device used</td><td>Reconnect automatically</td></tr>
+          <tr><td>Paired desktop receiver: name, local IP address, port and token</td><td>Reconnect without asking for the code again. The token is stored encrypted with an Android Keystore key</td></tr>
+          <tr><td>Preferences: selected output and analysis rate</td><td>Phone settings</td></tr>
+        </tbody>
+      </table>
+      <p>This data is excluded from cloud backups and device-to-device transfers: it stays only on your phone. You can delete it from the app (History → Delete, Profiles → Delete or Restore, Devices → Forget receiver) or all at once from Android Settings → Apps → Gesture Remote → Clear data. Uninstalling the app also removes it.</p>
+
+      <h2>Data sent and to whom</h2>
+      <p>The app only communicates with devices you choose:</p>
+      <ul>
+        <li><strong>Bluetooth keyboard:</strong> the phone acts as a keyboard for the paired computer and sends it key presses, such as right arrow or play/pause.</li>
+        <li><strong>Desktop receiver over WiFi:</strong> the phone’s name and model, the pairing code or token, and each command (the action and the key) are sent to <code>gesture-receiver</code> on your local network. The app refuses to connect to addresses outside the local network. This connection is not encrypted: someone on the same network could see which keys are sent, never images. We recommend using it on trusted networks.</li>
+      </ul>
+      <p>The app does not communicate with servers on the Internet. FabApps receives none of this data.</p>
+
+      <h2>Permissions</h2>
+      <table>
+        <thead><tr><th scope="col">Permission</th><th scope="col">Use</th></tr></thead>
+        <tbody>
+          <tr><td>Camera</td><td>Recognize gestures on the phone</td></tr>
+          <tr><td>Nearby devices (Bluetooth)</td><td>Act as a Bluetooth keyboard and become visible for pairing</td></tr>
+          <tr><td>Internet and network state</td><td>Connect to the desktop receiver on the local network</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Desktop receiver</h2>
+      <p><code>gesture-receiver</code> is an optional program that runs on your computer. It only accepts connections from the local network, stores on your computer only a cryptographic hash of the paired phones’ tokens together with their names, shows received commands in the terminal without saving them, and never connects to any server.</p>
+
+      <h2>Children</h2>
+      <p>The app is not specifically directed at children and does not collect personal data from anyone.</p>
+
+      <h2>Security</h2>
+      <p>On-device processing keeps images off the network. The receiver token is stored encrypted, and the receiver rejects connections that do not come from the local network or that come from web pages.</p>
+
+      <h2>Changes to this policy</h2>
+      <p>If the app changes how it handles data, we will update this page and its date.</p>
+
+      <h2>Contact</h2>
+      <p>For any privacy question, write to <a href="mailto:feedback@fab-apps.com">feedback@fab-apps.com</a>.</p>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>© 2026 FabApps · Gesture Remote</p>
+      <p><a href="./">Home</a> · <a href="mailto:feedback@fab-apps.com">feedback@fab-apps.com</a></p>
+    </div>
+  </footer>
+</body>
+</html>

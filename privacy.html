@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Política de privacidad — Gesture Remote</title>
+  <meta name="description" content="Política de privacidad de Gesture Remote: qué procesa la app, qué guarda en el teléfono y qué envía.">
+  <meta name="theme-color" content="#000525">
+  <link rel="alternate" hreflang="en" href="en/privacy.html">
+  <link rel="alternate" hreflang="es" href="privacy.html">
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <a class="skip" href="#contenido">Saltar al contenido</a>
+
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="./">
+        <img src="assets/icon-192.png" alt="" width="36" height="36">
+        Gesture Remote
+      </a>
+      <nav class="site-nav" aria-label="Principal">
+        <a href="./">Inicio</a>
+        <a href="en/privacy.html" lang="en" hreflang="en">English</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="contenido" class="doc">
+    <div class="wrap">
+      <h1>Política de privacidad</h1>
+      <p class="updated">Gesture Remote · Última actualización: 18 de octubre de 2026</p>
+
+      <p>Gesture Remote es una aplicación para Android, desarrollada por FabApps, que convierte gestos de la mano captados por la cámara en pulsaciones de teclas para controlar presentaciones y contenido multimedia. Esta política explica qué datos usa la aplicación y qué hace con ellos.</p>
+
+      <h2>Resumen</h2>
+      <ul>
+        <li>El reconocimiento de gestos se hace <strong>en el teléfono</strong>. Las imágenes de la cámara no se guardan ni se envían a ningún lado.</li>
+        <li>No hay cuentas, servidores, publicidad, analíticas ni rastreadores.</li>
+        <li>FabApps <strong>no recopila ni recibe</strong> ningún dato tuyo. Lo que la aplicación guarda queda en tu teléfono; lo que envía va solo a la computadora que vos elegís.</li>
+      </ul>
+
+      <h2>Cámara</h2>
+      <p>La aplicación usa la cámara solo en las pantallas Modo práctica, Iniciar presentación y Control multimedia, y pide permiso antes del primer uso. Cada imagen se analiza en el teléfono para ubicar los puntos de la mano y reconocer el gesto, y luego se descarta. No se guardan fotos ni video, ninguna imagen sale del teléfono y no hay reconocimiento facial ni identificación de personas. La cámara se libera al salir de esas pantallas o al pasar la aplicación a segundo plano.</p>
+
+      <h2>Datos guardados en el teléfono</h2>
+      <table>
+        <thead><tr><th scope="col">Dato</th><th scope="col">Para qué</th></tr></thead>
+        <tbody>
+          <tr><td>Perfiles y ajustes de sensibilidad</td><td>Recordar tus asignaciones de gestos a teclas</td></tr>
+          <tr><td>Historial de sesiones: fecha, duración, cantidad de acciones y descartes, cuadros por segundo y latencia (hasta 200 sesiones)</td><td>Diagnóstico del reconocimiento. No incluye imágenes ni posiciones de la mano</td></tr>
+          <tr><td>Dirección del último equipo Bluetooth usado</td><td>Reconectar automáticamente</td></tr>
+          <tr><td>Receptor de escritorio emparejado: nombre, dirección IP local, puerto y token</td><td>Reconectar sin volver a pedir el código. El token se guarda cifrado con una clave del Android Keystore</td></tr>
+          <tr><td>Preferencias: salida elegida y frecuencia de análisis</td><td>Configuración del teléfono</td></tr>
+        </tbody>
+      </table>
+      <p>Estos datos no participan de las copias de seguridad en la nube ni de las transferencias entre dispositivos: quedan solo en tu teléfono. Podés borrarlos desde la aplicación (Historial → Borrar, Perfiles → Eliminar o Restaurar, Dispositivos → Olvidar receptor) o todos a la vez desde Ajustes de Android → Aplicaciones → Gesture Remote → Borrar datos. Desinstalar la aplicación también los elimina.</p>
+
+      <h2>Datos que se envían y a quién</h2>
+      <p>La aplicación solo se comunica con equipos que vos elegís:</p>
+      <ul>
+        <li><strong>Teclado Bluetooth:</strong> el teléfono se presenta como teclado ante la computadora emparejada y le envía pulsaciones de teclas, por ejemplo flecha derecha o play/pausa.</li>
+        <li><strong>Receptor de escritorio por WiFi:</strong> a <code>gesture-receiver</code>, en tu red local, se envían el nombre y modelo del teléfono, el código de emparejamiento o el token, y cada orden (la acción y la tecla). La aplicación no se conecta a direcciones que no sean de la red local. Esta conexión no está cifrada: alguien conectado a la misma red podría ver qué teclas se envían, nunca imágenes. Recomendamos usarla en redes de confianza.</li>
+      </ul>
+      <p>La aplicación no se comunica con servidores en Internet. FabApps no recibe ninguno de estos datos.</p>
+
+      <h2>Permisos</h2>
+      <table>
+        <thead><tr><th scope="col">Permiso</th><th scope="col">Uso</th></tr></thead>
+        <tbody>
+          <tr><td>Cámara</td><td>Reconocer gestos en el teléfono</td></tr>
+          <tr><td>Dispositivos cercanos (Bluetooth)</td><td>Funcionar como teclado Bluetooth y hacerse visible para emparejar</td></tr>
+          <tr><td>Internet y estado de la red</td><td>Conectar con el receptor de escritorio en la red local</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Receptor de escritorio</h2>
+      <p><code>gesture-receiver</code> es un programa opcional que corre en tu computadora. Acepta conexiones solo desde la red local, guarda en tu computadora únicamente un resumen criptográfico (hash) de los tokens de los teléfonos emparejados junto con su nombre, muestra en la terminal las órdenes recibidas sin guardarlas y no se conecta a ningún servidor.</p>
+
+      <h2>Menores</h2>
+      <p>La aplicación no está dirigida específicamente a menores y no recopila datos personales de nadie.</p>
+
+      <h2>Seguridad</h2>
+      <p>El procesamiento local evita que las imágenes viajen por la red. El token del receptor se guarda cifrado y el receptor rechaza conexiones que no provengan de la red local o que provengan de páginas web.</p>
+
+      <h2>Cambios en esta política</h2>
+      <p>Si la aplicación cambia la forma en que trata los datos, actualizaremos esta página y la fecha de actualización.</p>
+
+      <h2>Contacto</h2>
+      <p>Para cualquier consulta sobre privacidad, escribí a <a href="mailto:feedback@fab-apps.com">feedback@fab-apps.com</a>.</p>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>© 2026 FabApps · Gesture Remote</p>
+      <p><a href="./">Inicio</a> · <a href="mailto:feedback@fab-apps.com">feedback@fab-apps.com</a></p>
+    </div>
+  </footer>
+</body>
+</html>
