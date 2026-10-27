@@ -21,7 +21,9 @@ La dirección de la política de privacidad para Google Play es
   originales para la ficha de Google Play (el ícono es también el del launcher de la app).
 - `.nojekyll`: indica a GitHub Pages que sirva los archivos tal cual.
 
-Es un sitio estático: no usa scripts, fuentes externas, cookies ni analíticas.
+Es un sitio estático: no usa fuentes externas, cookies ni analíticas. El único script es uno en línea,
+en las páginas en español, que muestra la versión en inglés si el idioma principal del navegador no es
+español; la elección manual de idioma (`?lang=es` / `?lang=en`) se guarda en `localStorage`.
 
 ## Publicar
 
