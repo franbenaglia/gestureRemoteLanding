@@ -9,6 +9,7 @@ Publicado con GitHub Pages en <https://franbenaglia.github.io/gestureRemoteLandi
 | --- | --- | --- |
 | Presentación | `index.html` | `en/index.html` |
 | Política de privacidad | `privacy.html` | `en/privacy.html` |
+| Demo técnica (sin indexar, sin datos de contacto) | — | `demo/index.html` |
 
 La dirección de la política de privacidad para Google Play es
 <https://franbenaglia.github.io/gestureRemoteLanding/privacy.html>.

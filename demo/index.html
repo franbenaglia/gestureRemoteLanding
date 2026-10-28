@@ -1,0 +1,511 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gesture Remote — Technical demo</title>
+  <meta name="description" content="Technical demonstration of Gesture Remote, a native Android app that recognizes hand gestures on the device and sends them as key presses over Bluetooth HID or a local network receiver.">
+  <!-- Indexing: this demo page is not indexed by default. To allow indexing, change the value to "index, follow". -->
+  <meta name="robots" content="noindex, follow">
+  <meta name="theme-color" content="#000525">
+  <link rel="icon" type="image/png" href="../assets/favicon.png">
+  <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+  <link rel="stylesheet" href="../assets/style.css">
+  <style>
+    .hero-shot img {
+      max-height: 32rem;
+      width: auto;
+      margin-inline: auto;
+      border-radius: 1.25rem;
+      box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(111, 220, 255, 0.15);
+    }
+
+    .button[aria-disabled="true"] {
+      background: #3a4470;
+      color: #c9d6ff;
+      box-shadow: none;
+      cursor: not-allowed;
+    }
+
+    .eyebrow {
+      margin: 0 0 0.5rem;
+      font-size: 0.875rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--cyan);
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin: 0.75rem 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .tags li {
+      font-size: 0.8125rem;
+      padding: 0.15rem 0.6rem;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: var(--surface-2);
+      color: var(--muted);
+    }
+
+    .card ul {
+      margin: 0.5rem 0 0;
+      padding-left: 1.1rem;
+      color: var(--muted);
+    }
+
+    /* Galería con ampliación */
+    .shots a {
+      display: block;
+      border-radius: 1.25rem;
+    }
+
+    .shots a:focus-visible {
+      outline: 3px solid var(--cyan);
+      outline-offset: 3px;
+    }
+
+    .lightbox {
+      padding: 0;
+      border: 0;
+      background: transparent;
+      max-width: min(100vw - 2rem, 30rem);
+      max-height: 100vh;
+    }
+
+    .lightbox::backdrop {
+      background: rgba(0, 3, 20, 0.85);
+    }
+
+    .lightbox figure {
+      margin: 0;
+    }
+
+    .lightbox img {
+      max-height: calc(100vh - 7rem);
+      width: auto;
+      margin-inline: auto;
+      border-radius: 1rem;
+    }
+
+    .lightbox figcaption {
+      color: #dfe7ff;
+    }
+
+    .lightbox button {
+      display: block;
+      margin: 0.75rem auto 0;
+      padding: 0.5rem 1.25rem;
+      border-radius: 999px;
+      border: 1px solid #4a5a9a;
+      background: #0b1438;
+      color: #e9eefc;
+      font: inherit;
+      cursor: pointer;
+    }
+
+    /* Diagrama de arquitectura */
+    .flow {
+      list-style: none;
+      margin: 0 0 1.5rem;
+      padding: 0;
+      display: grid;
+      gap: 0.5rem;
+    }
+
+    .flow > li {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 0.875rem;
+      padding: 0.75rem 1rem;
+    }
+
+    .flow > li + li {
+      position: relative;
+      margin-top: 1.25rem;
+    }
+
+    .flow > li + li::before {
+      content: "↓";
+      position: absolute;
+      top: -1.65rem;
+      left: 1.25rem;
+      color: var(--cyan);
+      font-weight: 800;
+    }
+
+    .flow strong {
+      display: block;
+    }
+
+    .flow span {
+      color: var(--muted);
+      font-size: 0.9375rem;
+    }
+
+    .flow .branches {
+      display: grid;
+      gap: 0.75rem;
+      grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+      background: none;
+      border: 0;
+      padding: 0;
+    }
+
+    .flow .branches > div {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 0.875rem;
+      padding: 0.75rem 1rem;
+    }
+
+    /* Notas técnicas */
+    .specs {
+      display: grid;
+      grid-template-columns: minmax(9rem, 14rem) 1fr;
+      margin: 0;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 1rem;
+      overflow: hidden;
+    }
+
+    .specs dt,
+    .specs dd {
+      margin: 0;
+      padding: 0.6rem 0.9rem;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .specs dt {
+      font-weight: 600;
+      background: var(--surface-2);
+    }
+
+    .specs dd {
+      color: var(--muted);
+      min-width: 0;
+    }
+
+    .specs dt:last-of-type,
+    .specs dd:last-of-type {
+      border-bottom: 0;
+    }
+
+    @media (max-width: 34rem) {
+      .specs {
+        grid-template-columns: 1fr;
+      }
+
+      .specs dt {
+        border-bottom: 0;
+        padding-bottom: 0.2rem;
+      }
+    }
+
+    .notice {
+      margin-top: 1.5rem;
+      padding: 1rem 1.25rem;
+      border-left: 4px solid var(--violet);
+      background: var(--surface);
+      border-radius: 0 0.75rem 0.75rem 0;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#content">Skip to content</a>
+
+  <header class="site-header">
+    <div class="wrap">
+      <span class="brand">
+        <img src="../assets/icon-192.png" alt="" width="36" height="36">
+        Gesture Remote
+      </span>
+      <nav class="site-nav" aria-label="Sections">
+        <a href="#capabilities">Capabilities</a>
+        <a href="#screenshots">Screenshots</a>
+        <a href="#test">How to test</a>
+        <a href="#architecture">Architecture</a>
+        <a href="#notes">Technical notes</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="content">
+    <div class="hero">
+      <div class="wrap">
+        <div>
+          <p class="eyebrow">Technical demo · Android</p>
+          <h1>Gesture <span>Remote</span></h1>
+          <p class="tagline">On-device hand gesture recognition for keyboard control</p>
+          <p>A native Android app (Kotlin, Jetpack Compose) that tracks the user's hand with the front camera,
+            recognizes deliberate gestures with an on-device machine-learning model and a temporal state machine,
+            and turns them into key presses: as a Bluetooth keyboard or through a small desktop receiver on the
+            local network. Typical uses are changing slides and controlling media playback.</p>
+          <p>All image processing happens on the phone. No frame is stored or sent anywhere.</p>
+          <div class="actions">
+            <!-- Fixed version: the checksum below matches exactly this file. -->
+            <a class="button" href="https://github.com/franbenaglia/gestureRemoteLanding/releases/download/v0.2.0/GestureRemote.apk"
+               type="application/vnd.android.package-archive">Download Android APK</a>
+          </div>
+          <p class="note">Version 0.2.0 · Android 9 or later · 29.7 MB · works offline</p>
+        </div>
+        <div class="hero-shot">
+          <img src="../assets/screenshots/en/home.webp" width="520" height="1108"
+               alt="Gesture Remote home screen with options: Start presentation, Media control, Practice mode, Profiles, History and diagnostics, Devices and Privacy.">
+        </div>
+      </div>
+    </div>
+
+    <section id="capabilities">
+      <div class="wrap">
+        <h2>Technical capabilities</h2>
+        <p class="lead">What this project implements and can be checked in the app.</p>
+        <ul class="grid">
+          <li class="card">
+            <h3>On-device computer vision</h3>
+            <p>CameraX feeds frames to the MediaPipe Gesture Recognizer running locally. It provides 21 hand
+              landmarks, handedness and seven static gestures, drawn live over the camera preview.</p>
+            <ul class="tags" aria-label="Technologies"><li>CameraX</li><li>MediaPipe Tasks</li><li>Offline ML</li></ul>
+          </li>
+          <li class="card">
+            <h3>Temporal gesture engine</h3>
+            <p>A state machine (locked, waiting, tracking, confirmed, cooldown) adds palm unlock,
+              hold-to-confirm, per-gesture confidence thresholds, cooldowns and dropout tolerance. Swipes and
+              up/down movements are derived from landmark trajectories. Pure Kotlin module with JVM unit tests.</p>
+            <ul class="tags" aria-label="Technologies"><li>Kotlin</li><li>State machine</li><li>Unit tests</li></ul>
+          </li>
+          <li class="card">
+            <h3>Bluetooth HID keyboard</h3>
+            <p>The phone registers as a Bluetooth keyboard through the Android <code>BluetoothHidDevice</code>
+              API, with a custom HID report descriptor for regular keys and media keys. No software is needed on
+              the computer.</p>
+            <ul class="tags" aria-label="Technologies"><li>Bluetooth HID</li><li>HID descriptors</li></ul>
+          </li>
+          <li class="card">
+            <h3>Local network receiver</h3>
+            <p>A desktop receiver written in Go, discovered with mDNS. Pairing uses a 6-digit code; the resulting
+              token is stored encrypted with the Android Keystore. Commands travel over WebSocket and are typed
+              through a virtual keyboard (uinput on Linux).</p>
+            <ul class="tags" aria-label="Technologies"><li>Go</li><li>WebSocket</li><li>mDNS / NSD</li></ul>
+          </li>
+          <li class="card">
+            <h3>Configurable profiles</h3>
+            <p>Each gesture maps to an action and a key with modifiers, hand selection and sensitivity. Profiles
+              are validated, persisted with DataStore and exported or imported as versioned JSON.</p>
+            <ul class="tags" aria-label="Technologies"><li>Jetpack Compose</li><li>DataStore</li><li>JSON</li></ul>
+          </li>
+          <li class="card">
+            <h3>Diagnostics and privacy</h3>
+            <p>A practice mode shows what is detected and why a gesture was ignored. Session history keeps only
+              counters, frame rate and gesture-to-key latency (Room). English and Spanish interface.</p>
+            <ul class="tags" aria-label="Technologies"><li>Room</li><li>Localization</li></ul>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="screenshots">
+      <div class="wrap">
+        <h2>Screenshots</h2>
+        <p class="lead">Captured from the release build on a phone. Select an image to enlarge it.
+          The control and practice screens, which show the live camera, are not included.</p>
+        <ul class="shots">
+          <li>
+            <figure>
+              <a href="../assets/screenshots/en/home.webp" data-lightbox>
+                <img src="../assets/screenshots/en/home.webp" width="520" height="1108" loading="lazy"
+                     alt="Home screen with the main options of the app.">
+              </a>
+              <figcaption>Home</figcaption>
+            </figure>
+          </li>
+          <li>
+            <figure>
+              <a href="../assets/screenshots/en/profiles.webp" data-lightbox>
+                <img src="../assets/screenshots/en/profiles.webp" width="520" height="1108" loading="lazy"
+                     alt="Profiles screen with the Presentation and Media profiles, their gestures and buttons to edit, duplicate, export and restore.">
+              </a>
+              <figcaption>Profiles</figcaption>
+            </figure>
+          </li>
+          <li>
+            <figure>
+              <a href="../assets/screenshots/en/editor.webp" data-lightbox>
+                <img src="../assets/screenshots/en/editor.webp" width="520" height="1108" loading="lazy"
+                     alt="Profile editor: the Fist gesture mapped to Black screen with the B key, modifier keys and hand selection.">
+              </a>
+              <figcaption>Gesture editor</figcaption>
+            </figure>
+          </li>
+          <li>
+            <figure>
+              <a href="../assets/screenshots/en/privacy.webp" data-lightbox>
+                <img src="../assets/screenshots/en/privacy.webp" width="520" height="1108" loading="lazy"
+                     alt="Privacy screen explaining that images are analyzed on the phone, what is stored and what is sent.">
+              </a>
+              <figcaption>In-app privacy summary</figcaption>
+            </figure>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="test">
+      <div class="wrap">
+        <h2>How to test the application</h2>
+        <p class="lead">Requires an Android phone with Android 9 or later and a front camera. No account,
+          no Internet connection and no computer are needed for the practice mode.</p>
+        <ol class="steps compact">
+          <li>Download the APK on the Android phone using the button above.</li>
+          <li>Open the downloaded file from the notification or the Downloads folder.</li>
+          <li>Android may ask for permission to install apps from your browser or file manager. Grant it for
+            that app, then return to the installer. Because the app is not installed from Google Play, Android
+            may show an additional notice before installing.</li>
+          <li>Install and open Gesture Remote, then allow camera access when asked.</li>
+          <li>Follow the suggested demonstration below.</li>
+        </ol>
+
+        <h3 style="margin-top: 2rem">Suggested demonstration</h3>
+        <div class="two">
+          <div class="card">
+            <h3>Practice mode (phone only)</h3>
+            <ol>
+              <li>Open <strong>Practice mode</strong> and stand the phone so the front camera sees your hand.</li>
+              <li>Hold your open palm still for about one second: the control unlocks and the phone vibrates.</li>
+              <li>Show a victory sign ✌: with the default Presentation profile the screen reports the gesture and its
+                action (Start presentation, <kbd>F5</kbd>). Select the Media profile in <strong>Profiles</strong> to try
+                thumb up for play/pause.</li>
+              <li>Swipe your hand to your right or left and watch the confirmed gesture, its confidence and, when
+                a movement is ignored, the reason.</li>
+              <li>Hold your palm still for about two seconds, or tap <strong>Lock</strong>, to lock again.</li>
+            </ol>
+          </div>
+          <div class="card">
+            <h3>Controlling a computer (optional)</h3>
+            <p><strong>Bluetooth keyboard:</strong> in <strong>Devices</strong>, enable the Bluetooth keyboard and
+              pair the phone from the computer's Bluetooth settings. Then open <strong>Start presentation</strong>
+              with a slide deck in full screen and swipe to change slides.</p>
+            <p><strong>Desktop receiver:</strong> run the receiver on a computer in the same WiFi network, select
+              it in <strong>Devices</strong> and enter the 6-digit code it shows.</p>
+            <ul class="downloads" aria-label="Download the desktop receiver, version 0.2.0">
+              <li><a href="https://github.com/franbenaglia/gestureRemoteLanding/releases/download/v0.2.0/gesture-receiver-linux-amd64">Linux x86-64</a></li>
+              <li><a href="https://github.com/franbenaglia/gestureRemoteLanding/releases/download/v0.2.0/gesture-receiver-windows-amd64.exe">Windows x86-64 (beta)</a></li>
+              <li><a href="https://github.com/franbenaglia/gestureRemoteLanding/releases/download/v0.2.0/gesture-receiver-macos-arm64">macOS Apple Silicon (beta)</a></li>
+              <li><a href="https://github.com/franbenaglia/gestureRemoteLanding/releases/download/v0.2.0/gesture-receiver-macos-amd64">macOS Intel (beta)</a></li>
+            </ul>
+            <p>On Linux the receiver needs a one-time udev rule for <code>/dev/uinput</code>.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="architecture">
+      <div class="wrap">
+        <h2>Technical architecture</h2>
+        <p class="lead">Kotlin multi-module Android project plus a Go desktop receiver. All processing runs on the
+          device; there is no backend or cloud service.</p>
+        <ol class="flow" aria-label="Data flow from the camera to the computer">
+          <li><strong>Front camera</strong><span>CameraX image analysis with a limited frame rate.</span></li>
+          <li><strong>Hand recognition</strong><span>MediaPipe Gesture Recognizer (<code>gesture_recognizer.task</code>, bundled in the APK): landmarks, handedness and gesture scores. Module <code>:vision</code>.</span></li>
+          <li><strong>Temporal engine and profile mapping</strong><span>Pure Kotlin/JVM module <code>:core</code>: gesture confirmation, lock state, motion gestures and gesture-to-action mapping.</span></li>
+          <li><strong>Output adapter</strong><span>Module <code>:output</code>, one implementation per transport.</span></li>
+          <li class="branches">
+            <div><strong>Bluetooth HID</strong><span>Phone acts as a keyboard paired with the computer.</span></div>
+            <div><strong>Local network</strong><span>WebSocket to the Go receiver, which types the keys through a virtual keyboard.</span></div>
+          </li>
+        </ol>
+        <p>The user interface uses Jetpack Compose with manual dependency injection. Profiles are stored with
+          DataStore and session statistics with Room.</p>
+      </div>
+    </section>
+
+    <section id="notes">
+      <div class="wrap">
+        <h2>Technical notes</h2>
+        <dl class="specs">
+          <dt>Application</dt>
+          <dd>Gesture Remote, package <code>com.fabapps.gestureremote</code></dd>
+          <dt>Version</dt>
+          <dd>0.2.0 (version code 2), signed release build</dd>
+          <dt>Minimum Android</dt>
+          <dd>Android 9 (API 28)</dd>
+          <dt>Architectures</dt>
+          <dd>arm64-v8a, armeabi-v7a (physical ARM phones; x86 emulators are not supported by this APK)</dd>
+          <dt>Hardware</dt>
+          <dd>Front camera. Bluetooth keyboard mode needs a phone whose system supports it (the app checks this).</dd>
+          <dt>Internet</dt>
+          <dd>Not required. The network permission is used only to reach the desktop receiver on the local network.</dd>
+          <dt>Permissions</dt>
+          <dd>Camera; Bluetooth connect and advertise (keyboard mode); network access and network state (local receiver)</dd>
+          <dt>APK size</dt>
+          <dd>31,190,717 bytes (29.7 MB)</dd>
+          <dt>SHA-256</dt>
+          <dd><code>fb49ca7ecbd871512b017ee59c501c0885541c1e9b4a4138a08945be10c4eaff</code></dd>
+        </dl>
+
+        <h3 style="margin-top: 2rem">Known limitations</h3>
+        <ul>
+          <li>Gesture recognition depends on lighting, distance and background; very dim scenes reduce accuracy.</li>
+          <li>Not every phone supports Bluetooth keyboard mode. With Linux computers, reconnecting after restarting
+            the phone's Bluetooth may require pairing again; the network receiver is recommended there.</li>
+          <li>The local network connection is not encrypted: it carries key commands, never images, and is meant
+            for trusted networks.</li>
+          <li>The Windows and macOS receivers are beta builds; media keys are not available on macOS.</li>
+          <li>Pointer (mouse) mode is not implemented yet.</li>
+        </ul>
+
+        <p class="notice">This application is provided as is for technical evaluation. It is not distributed
+          through Google Play yet and has not undergone an independent security audit. It collects no personal
+          data and sends nothing over the Internet.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>© 2026 FabApps · Gesture Remote · Technical demonstration</p>
+    </div>
+  </footer>
+
+  <dialog class="lightbox" id="lightbox" aria-label="Enlarged screenshot">
+    <figure>
+      <img src="data:," alt="">
+      <figcaption></figcaption>
+    </figure>
+    <button type="button" autofocus>Close</button>
+  </dialog>
+
+  <script>
+    // Ampliación de capturas. Sin JavaScript, los enlaces abren la imagen directamente.
+    (function () {
+      var box = document.getElementById("lightbox");
+      if (!box || typeof box.showModal !== "function") return;
+      var img = box.querySelector("img");
+      var caption = box.querySelector("figcaption");
+      document.querySelectorAll("a[data-lightbox]").forEach(function (link) {
+        link.addEventListener("click", function (event) {
+          event.preventDefault();
+          var thumb = link.querySelector("img");
+          img.src = link.getAttribute("href");
+          img.alt = thumb ? thumb.alt : "";
+          var fig = link.closest("figure");
+          caption.textContent = fig ? fig.querySelector("figcaption").textContent : "";
+          box.showModal();
+        });
+      });
+      box.querySelector("button").addEventListener("click", function () { box.close(); });
+      box.addEventListener("click", function (event) {
+        if (event.target === box) box.close();
+      });
+    })();
+  </script>
+</body>
+</html>
